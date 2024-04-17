@@ -6,6 +6,7 @@ A version-control system is essentially a backup system for related collections 
 1. Creates a new Gitlet version-control system in the current directory.
     `java gitlet.Main init`
 2. Save the contents of entire directories of files. -add, remove, commit
+    
     `java gitlet.Main add [fileName]`
     `java gitlet.Main rm [fileName]`
     `java gitlet.Main commit [message]`
@@ -47,6 +48,8 @@ All `Blon` objects are serialized within the Blob_folder,
 `implements Serializable`
 ### StagingArea
 This class represents the temporary holding area where you prepare your changes before they are permanently saved in a commit. It keeps track of added files, and removed files. Once commit is made, stagingArea will be cleared.
+### AdditionalUtils
+This class contains helpful utility methods to read/write objects or `String` contents from/to files, as well as reporting error with messages.
 
 
 ## Persistence
