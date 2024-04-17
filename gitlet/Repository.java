@@ -242,6 +242,10 @@ public class Repository {
         return map;
     }
 
+    /**
+     * make a commit with message. check stagingArea before commit the change.
+     * @param message
+     */
     public static void commit(String message) {
         StagingArea stagingArea = getStagingArea();
         if (stagingArea.isClean()) {
@@ -254,6 +258,11 @@ public class Repository {
         setHeadCommit(newCommit.getCommitSHA1());
     }
 
+    /**
+     * Make a merge commit with message. Add the second parent id into parent list.
+     * @param message
+     * @param mergedCommitId
+     */
     private static void mergeCommit(String message, String mergedCommitId) {
         StagingArea stagingArea = getStagingArea();
         if (stagingArea.isClean()) {
@@ -280,6 +289,13 @@ public class Repository {
         return newCommit;
     }
 
+    /**
+     * similar to create new commit, add second parent id into the commit.
+     * @param message
+     * @param tracked
+     * @param secondParentId
+     * @return
+     */
     private static Commit createMergedCommit(String message, Map<String, String> tracked,
         String secondParentId) {
         Commit headCommit = getHeadCommit();
@@ -300,6 +316,7 @@ public class Repository {
             stagingArea.saveStaging();
         }
     }
+
 
     public static void log() {
         StringBuilder log = new StringBuilder();
@@ -346,6 +363,10 @@ public class Repository {
         System.out.println(messageMatched);
     }
 
+    /**
+     * pull the string array of all Commit id.
+     * @return
+     */
     private static String[] getAllCommitId() {
         Set<String> commitFullSHAs = new HashSet<>();
         String[] commitDirs = COMMITFOLDER.list();
@@ -387,6 +408,11 @@ public class Repository {
         }
     }
 
+    /**
+     * if Commitid is less than 40 digits, return the commit using short UID if there exists one and only one commit with that uid.
+     * @param commitId
+     * @return
+     */
     public static Commit getCommitWithShorterUID(String commitId) {
         Commit foundCommit;
         if (commitId.length() < UID_LENGTH) {
@@ -473,7 +499,10 @@ public class Repository {
         }
     }
 
-
+    /**
+     * reset to a specified branch Commit.
+     * @param branchCommit
+     */
     private static void restoreBranchCommit(Commit branchCommit) {
         //Clear current StagingArea
         StagingArea stagingArea = getStagingArea();
@@ -490,7 +519,10 @@ public class Repository {
         branchCommit.restoreAllTracked();
     }
 
-
+    /**
+     * creat a new branch with name specified.
+     * @param newBranchName
+     */
     public static void branch(String newBranchName) {
         File newBranch = join(HEADSFOLDER, newBranchName);
         if (newBranch.exists()) {
@@ -510,6 +542,10 @@ public class Repository {
         branchToRemove.delete();
     }
 
+    /**
+     * set head commit to a specified commit.
+     * @param commitSHAId
+     */
     public static void reset(String commitSHAId) {
         File givenCommitFile = getObjectFile(commitSHAId);
         if (!givenCommitFile.exists()) {
@@ -521,6 +557,12 @@ public class Repository {
         setHeadCommit(commitSHAId);
     }
 
+    /**
+     * exit if there is uncommitted changes, or if specified branch does not exist.
+     * cannot merge with itself.
+     * @param branchName
+     * @param stagingArea
+     */
     private static void mergeFailureCheck(String branchName, StagingArea stagingArea) {
         //Failure check
         if (!stagingArea.isClean()) {
@@ -535,6 +577,13 @@ public class Repository {
         }
     }
 
+    /**
+     * exit if branches are not diverged.
+     * @param branchName
+     * @param splitCommitID
+     * @param currentHead
+     * @param branchHead
+     */
     private static void mergeSplitCommitCheck(String branchName,
         String splitCommitID, Commit currentHead, Commit branchHead) {
         if (splitCommitID.equals(branchHead.getCommitSHA1())) {
