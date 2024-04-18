@@ -19,7 +19,7 @@ A version-control system is essentially a backup system for related collections 
     - To checkout to a branch `java gitlet.Main checkout [branchName]`
 5. View the history of the commit. -log
     `java gitlet.Main log`
-6. View the history of global commit -global-long
+6. View the history of global commit -global-log
     `java gitlet.Main global-log`
 7. Find commits with specified message -find
     `java gitlet.Main find [message]`
